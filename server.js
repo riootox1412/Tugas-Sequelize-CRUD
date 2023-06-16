@@ -13,7 +13,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // parse request to json
-app.unsubscribe(express.json());
+app.use(express.json());
 
 // parse request to x-www-form-urlencoded
 app.use(
