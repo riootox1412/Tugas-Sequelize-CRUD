@@ -84,32 +84,114 @@ exports.delete = (req, res) => {
 };
 
 // Update biodata
-exports.updateOne = (req, res) => {
-  const id = req.params.id;
+exports.update = (req, res) => {
+  // validate request
+  if (!req.body.nama) {
+    res.status(400).send({
+      message: 'nama tidak ada',
+    });
+    return;
+  }
+  if (!req.body.tempat_lahir) {
+    res.status(400).send({
+      message: 'tempat lahir tidak ada',
+    });
+    return;
+  }
+  if (!req.body.tanggal_lahir) {
+    res.status(400).send({
+      message: 'tanggal lahir tidak ada',
+    });
+    return;
+  }
+  if (!req.body.alamat) {
+    res.status(400).send({
+      message: 'alamat tidak ada',
+    });
+    return;
+  }
 
-  Biodata.findOne({
+  let biodata = Biodata.findOne({
     where: {
-      id: id,
+      id: req.params.id,
     },
   })
     .then((data) => {
-      if (!data) {
-        return res.status(404).send({
-          message: 'Data tidak ditemukan',
-        });
-      }
-
-      // Melakukan pembaruan data
       data.nama = req.body.nama;
       data.tempat_lahir = req.body.tempat_lahir;
       data.tanggal_lahir = req.body.tanggal_lahir;
       data.alamat = req.body.alamat;
-      // Tambahkan field lainnya sesuai kebutuhan
 
-      return data.save();
+      data.save();
+      res.send(data);
     })
-    .then((updatedData) => {
-      res.send(updatedData);
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || 'Gagal memperbarui data!',
+      });
+    });
+};
+
+// exports.updateOne = (req, res) => {
+//   const id = req.params.id;
+
+//   Biodata.findOne({
+//     where: {
+//       id: id,
+//     },
+//   })
+//     .then((data) => {
+//       if (!data) {
+//         return res.status(404).send({
+//           message: 'Data tidak ditemukan',
+//         });
+//       }
+
+//       // Melakukan pembaruan data
+//       data.nama = req.body.nama;
+//       data.tempat_lahir = req.body.tempat_lahir;
+//       data.tanggal_lahir = req.body.tanggal_lahir;
+//       data.alamat = req.body.alamat;
+//       // Tambahkan field lainnya sesuai kebutuhan
+
+//       return data.save();
+//     })
+//     .then((updatedData) => {
+//       res.send(updatedData);
+//     })
+//     .catch((err) => {
+//       res.status(500).send({
+//         message: err.message || 'Gagal memperbarui data!',
+//       });
+//     });
+// };
+
+// Pacth
+exports.pacth = (req, res) => {
+  Biodata.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((data) => {
+      if (req.body.nama) {
+        data.nama = req.body.nama;
+      }
+
+      if (req.body.tempat_lahir) {
+        data.tempat_lahir = req.body.tempat_lahir;
+      }
+
+      if (req.body.tanggal_lahir) {
+        data.tanggal_lahir = req.body.tanggal_lahir;
+      }
+
+      if (req.body.alamat) {
+        data.alamat = req.body.alamat;
+      }
+
+      data.save();
+      res.send(data);
     })
     .catch((err) => {
       res.status(500).send({

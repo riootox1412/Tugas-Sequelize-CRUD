@@ -56,8 +56,16 @@ app.delete('/:id', (req, res) => {
 });
 
 // Update biodata with id route
+app.put('/:id', (req, res) => {
+  biodataController.update(req, res);
+});
+// app.put('/:id', (req, res) => {
+//   biodataController.updateOne(req, res);
+// });
+
+// pacth biodata with id route
 app.patch('/:id', (req, res) => {
-  biodataController.updateOne(req, res);
+  biodataController.pacth(req, res);
 });
 
 // set port
